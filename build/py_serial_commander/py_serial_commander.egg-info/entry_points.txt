@@ -1,0 +1,3 @@
+[console_scripts]
+serial_commander = py_serial_commander.serial_commander:main
+

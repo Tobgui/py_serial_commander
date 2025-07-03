@@ -1,0 +1,11 @@
+package.xml
+setup.cfg
+setup.py
+py_serial_commander.egg-info/PKG-INFO
+py_serial_commander.egg-info/SOURCES.txt
+py_serial_commander.egg-info/dependency_links.txt
+py_serial_commander.egg-info/entry_points.txt
+py_serial_commander.egg-info/requires.txt
+py_serial_commander.egg-info/top_level.txt
+py_serial_commander.egg-info/zip-safe
+resource/py_serial_commander
