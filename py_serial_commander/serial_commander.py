@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 import serial
+import time
 
 class WheelVelPublisher(Node):
     def __init__(self):
@@ -14,6 +15,7 @@ class WheelVelPublisher(Node):
         self.v = 0.0
         self.omega = 0.0
         try:
+            time.sleep(2)  
             self.ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
             self.get_logger().info('Serial port opened.')
         except serial.SerialException as e:
@@ -23,15 +25,23 @@ class WheelVelPublisher(Node):
 
     def cmd_vel_callback(self, msg: Twist):
         self.v = msg.linear.x
-        self.omega = msg.angular.z
+        self.omega = msg  .angulasr.z
 
     def send_serial_command(self):
+
         v_r = (self.v + (self.wheel_base/2)*self.omega) * 100
         v_l = (self.v - (self.wheel_base/2)*self.omega) * 100
-        serial_msg = f'L:{v_l:.2f},R:{v_r:.2f}\n'
+        serial_msg = f'L:{int(v_l)},R:{int(v_r)}\r\n'
         self.get_logger().info(f'Sending: {serial_msg.strip()}')
         if self.ser and self.ser.is_open:
             self.ser.write(serial_msg.encode())
+
+    def destroy_node(self):
+        if self.ser and self.ser.is_open:
+            self.get_logger().info("Closing serial port")
+            self.ser.close()
+        super().destroy_node()
+
 
 def main(args=None):
     rclpy.init(args=args)
